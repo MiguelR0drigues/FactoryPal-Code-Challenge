@@ -5,7 +5,7 @@ export const StyledTable = styled.table`
   border-collapse: collapse;
   table-layout: fixed;
   width: 100%;
-  max-width: 1300px;
+  max-width: 100%;
 `;
 
 export const StyledTableHead = styled.thead`
