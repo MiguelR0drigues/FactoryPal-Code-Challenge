@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import fetchData from "./api/data";
 import Card from "./components/card";
-import MetricSection from "./components/metric-section";
+import DowntimeSection from "./components/metrics-sections/downtime-section";
+import EfficiencySection from "./components/metrics-sections/efficiency-section";
+import ShiftSection from "./components/metrics-sections/shift-section";
 import Table from "./components/table";
 import { ToastProvider } from "./contexts/ToastContext";
 import { Category, MetricsData } from "./types";
@@ -29,6 +31,10 @@ const App = () => {
     | undefined
   >(undefined);
 
+  const downtimeMetrics = separateMetricsByCategory(metrics).downtime;
+  const shiftMetrics = separateMetricsByCategory(metrics).shift;
+  const efficiencyMetrics = separateMetricsByCategory(metrics).efficiency;
+
   useEffect(() => {
     async function fetchMetrics() {
       try {
@@ -44,7 +50,7 @@ const App = () => {
     }
     fetchMetrics();
   }, []);
-
+  console.log(selectedMetric);
   return (
     <ToastProvider>
       {metrics && metrics.length > 0 && (
@@ -54,15 +60,43 @@ const App = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            margin: "10px",
           }}
         >
-          <Card>
-            <MetricSection
-              selected={selectedMetric}
-              setSelected={setSelectedMetric}
-              data={separateMetricsByCategory(metrics).downtime}
-            />
-          </Card>
+          <article
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: "20px",
+              maxHeight: "500px",
+            }}
+          >
+            <Card>
+              <EfficiencySection
+                data={efficiencyMetrics}
+                selected={selectedMetric}
+                setSelected={setSelectedMetric}
+              />
+            </Card>
+            {shiftMetrics && shiftMetrics.length > 0 && (
+              <Card>
+                <ShiftSection
+                  selected={selectedMetric}
+                  setSelected={setSelectedMetric}
+                  data={shiftMetrics}
+                />
+              </Card>
+            )}
+            {downtimeMetrics && downtimeMetrics.length > 0 && (
+              <Card>
+                <DowntimeSection
+                  selected={selectedMetric}
+                  setSelected={setSelectedMetric}
+                  data={downtimeMetrics}
+                />
+              </Card>
+            )}
+          </article>
           <Card>
             <Table
               data={metrics}

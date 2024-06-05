@@ -1,5 +1,17 @@
 import styled from "styled-components";
 
+export const SubSection = styled.div`
+  > h3 {
+    font-weight: normal;
+    font-size: 16px;
+  }
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const StyledUnorderedList = styled.ul`
   display: flex;
   flex-direction: column;

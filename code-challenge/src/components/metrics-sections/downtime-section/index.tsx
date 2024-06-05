@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
-import { colors } from "../../theme";
-import { MetricsData } from "../../types";
-import { StyledListItem, StyledUnorderedList } from "./styles";
+import { colors } from "../../../theme";
+import { MetricsData } from "../../../types";
+import { StyledListItem, StyledUnorderedList } from "../styles";
 
 interface Props {
   data: MetricsData[];
@@ -24,7 +24,11 @@ interface Props {
   >;
 }
 
-const MetricSection = ({ data, selected, setSelected }: Props): JSX.Element => {
+const DowntimeSection = ({
+  data,
+  selected,
+  setSelected,
+}: Props): JSX.Element => {
   const chartRef = useRef<SVGSVGElement | null>(null);
   const customColors = [colors.darkBlue, colors.lightBlue];
 
@@ -118,7 +122,7 @@ const MetricSection = ({ data, selected, setSelected }: Props): JSX.Element => {
   }, [selected]);
   return (
     <>
-      <h2>Downtime Chart</h2>
+      <h2>Downtime Chart (Seconds)</h2>
       <svg ref={chartRef}></svg>
       <section>
         <StyledUnorderedList>
@@ -137,4 +141,4 @@ const MetricSection = ({ data, selected, setSelected }: Props): JSX.Element => {
   );
 };
 
-export default MetricSection;
+export default DowntimeSection;
