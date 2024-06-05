@@ -50,7 +50,7 @@ const App = () => {
     }
     fetchMetrics();
   }, []);
-  console.log(selectedMetric);
+
   return (
     <ToastProvider>
       {metrics && metrics.length > 0 && (
@@ -69,6 +69,7 @@ const App = () => {
               gridTemplateColumns: "1fr 1fr 1fr",
               gap: "20px",
               maxHeight: "500px",
+              maxWidth: "90%",
             }}
           >
             <Card>

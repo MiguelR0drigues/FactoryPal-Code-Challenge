@@ -22,6 +22,8 @@ interface Props {
 }
 
 const EfficiencySection = ({ data, setSelected }: Props) => {
+  const ooeMetric = data.find((item) => item.id === "oee");
+
   return (
     <section>
       <h2>Efficiency</h2>
@@ -29,7 +31,7 @@ const EfficiencySection = ({ data, setSelected }: Props) => {
         <h3>Overall equipment effectiveness</h3>
         <GaugeChart
           metricId="oee"
-          value={data[0].value / 100}
+          value={ooeMetric!.value / 100}
           setSelected={setSelected}
         />
       </SubSection>

@@ -23,13 +23,12 @@ const GaugeChart = ({ metricId, value, setSelected }: Props) => {
   useEffect(() => {
     if (!chartRef.current) return;
 
-    const width = 200;
+    const width = 160;
     const height = 100;
     const outerRadius = Math.min(width, height * 2) / 2;
-    const innerRadius = outerRadius - 10;
+    const innerRadius = outerRadius - 20;
     const needleLength = outerRadius - 20;
 
-    // Clear previous SVG elements
     d3.select(chartRef.current).selectAll("*").remove();
 
     const svg = d3
@@ -37,7 +36,7 @@ const GaugeChart = ({ metricId, value, setSelected }: Props) => {
       .attr("width", width)
       .attr("height", height)
       .append("g")
-      .attr("transform", `translate(${width / 2}, ${height})`)
+      .attr("transform", `translate(${width / 2}, ${height - 20})`)
       .on("mouseover", function () {
         setSelected({ id: metricId, category: "shift" });
       })
@@ -75,6 +74,33 @@ const GaugeChart = ({ metricId, value, setSelected }: Props) => {
       .attr("stroke", "black")
       .attr("stroke-width", 2)
       .attr("transform", `rotate(${value * 180 - 90})`);
+
+    svg
+      .append("text")
+      .attr("x", -outerRadius + 10)
+      .attr("y", 20)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "12px")
+      .attr("font-weight", "bold")
+      .text("0");
+
+    svg
+      .append("text")
+      .attr("x", outerRadius - 11)
+      .attr("y", 20)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "12px")
+      .attr("font-weight", "bold")
+      .text("100");
+
+    svg
+      .append("text")
+      .attr("x", 0)
+      .attr("y", 20)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "16px")
+      .attr("font-weight", "bold")
+      .text(value * 100);
   }, [value]);
 
   return <svg ref={chartRef}></svg>;

@@ -44,7 +44,7 @@ export const StyledTableRow = styled.tr<{ isSelected?: boolean }>`
 
 export const StyledTableCell = styled.td`
   text-align: center;
-  height: 65px;
+  height: 40px;
   max-height: 100px;
   overflow: hidden;
 `;

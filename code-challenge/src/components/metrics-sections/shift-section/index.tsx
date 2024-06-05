@@ -119,7 +119,7 @@ const ShiftSection = ({ data, selected, setSelected }: Props): JSX.Element => {
     };
 
     renderChart();
-  }, [dataInHours, setSelected]);
+  }, [dataInHours]);
 
   useEffect(() => {
     const updateSelection = () => {
@@ -137,7 +137,7 @@ const ShiftSection = ({ data, selected, setSelected }: Props): JSX.Element => {
     };
 
     updateSelection();
-  }, []);
+  }, [selected]);
 
   return (
     <>
