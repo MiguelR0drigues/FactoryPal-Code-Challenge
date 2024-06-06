@@ -112,7 +112,12 @@ const GaugeChart = ({ metricId, value }: Props) => {
   }, [value]);
 
   useEffect(() => {
-    if (selected?.category !== "efficiency" && selected?.id !== "oee") return;
+    if (
+      selected !== undefined &&
+      selected?.category !== "efficiency" &&
+      selected?.id !== "oee"
+    )
+      return;
     const updateSelection = () => {
       const svg = d3.select(chartRef.current);
 
