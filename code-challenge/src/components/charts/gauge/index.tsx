@@ -7,6 +7,12 @@ import { MetricsData } from "../../../types";
 interface Props {
   metricId?: string;
   value: number;
+  selected:
+    | {
+        id?: string | null | undefined;
+        category: MetricsData["category"];
+      }
+    | undefined;
   setSelected: React.Dispatch<
     React.SetStateAction<
       | {
@@ -17,7 +23,7 @@ interface Props {
     >
   >;
 }
-const GaugeChart = ({ metricId, value, setSelected }: Props) => {
+const GaugeChart = ({ metricId, value, selected, setSelected }: Props) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -35,10 +41,12 @@ const GaugeChart = ({ metricId, value, setSelected }: Props) => {
       .select(chartRef.current)
       .attr("width", width)
       .attr("height", height)
+      .attr("class", "semicircle")
       .append("g")
       .attr("transform", `translate(${width / 2}, ${height - 20})`)
       .on("mouseover", function () {
-        setSelected({ id: metricId, category: "shift" });
+        selected?.id !== metricId &&
+          setSelected({ id: metricId, category: "shift" });
       })
       .on("mouseout", function () {
         setSelected(undefined);
@@ -53,12 +61,14 @@ const GaugeChart = ({ metricId, value, setSelected }: Props) => {
     svg
       .append("path")
       .datum({ endAngle: Math.PI / 2 })
+      .attr("class", "background-arc")
       .style("fill", "#e0e0e0")
       .attr("d", arc);
 
     svg
       .append("path")
       .datum({ endAngle: -Math.PI / 2 + Math.PI * value })
+      .attr("class", "value-arc")
       .style(
         "fill",
         value === 0.5 ? colors.yellow : value > 0.5 ? colors.green : colors.red
@@ -79,6 +89,7 @@ const GaugeChart = ({ metricId, value, setSelected }: Props) => {
       .append("text")
       .attr("x", -outerRadius + 10)
       .attr("y", 20)
+      .attr("fill", "white")
       .attr("text-anchor", "middle")
       .attr("font-size", "12px")
       .attr("font-weight", "bold")
@@ -88,6 +99,7 @@ const GaugeChart = ({ metricId, value, setSelected }: Props) => {
       .append("text")
       .attr("x", outerRadius - 11)
       .attr("y", 20)
+      .attr("fill", "white")
       .attr("text-anchor", "middle")
       .attr("font-size", "12px")
       .attr("font-weight", "bold")
@@ -100,8 +112,30 @@ const GaugeChart = ({ metricId, value, setSelected }: Props) => {
       .attr("text-anchor", "middle")
       .attr("font-size", "16px")
       .attr("font-weight", "bold")
+      .attr(
+        "fill",
+        value === 0.5 ? colors.yellow : value > 0.5 ? colors.green : colors.red
+      )
+
       .text(value * 100);
   }, [value]);
+
+  useEffect(() => {
+    const updateSelection = () => {
+      const svg = d3.select(chartRef.current);
+
+      svg
+        .selectAll(".background-arc")
+        .style(
+          "filter",
+          metricId === selected?.id
+            ? `drop-shadow(0px 5px 7px #98a1ec)`
+            : "none"
+        );
+    };
+
+    updateSelection();
+  }, [selected]);
 
   return <svg ref={chartRef}></svg>;
 };

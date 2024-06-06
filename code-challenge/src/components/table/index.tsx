@@ -31,7 +31,8 @@ const Table = ({ data, selected, setSelected }: Props): JSX.Element => {
   const cols = Object.keys(data[0] || {});
 
   const handleMouseEnter = (row: MetricsData) => {
-    setSelected({ id: row.id, category: row.category });
+    selected?.id !== row.id &&
+      setSelected({ id: row.id, category: row.category });
   };
   const handleMouseLeave = () => {
     setSelected(undefined);

@@ -33,6 +33,7 @@ const EfficiencySection = ({ data, selected, setSelected }: Props) => {
         <GaugeChart
           metricId="oee"
           value={ooeMetric!.value / 100}
+          selected={selected}
           setSelected={setSelected}
         />
       </SubSection>

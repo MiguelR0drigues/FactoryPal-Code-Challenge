@@ -92,7 +92,8 @@ const DoughnutChart = ({
         .attr("d", arc)
         .attr("fill", (_, i) => customColors[i % customColors.length])
         .on("mouseover", function (event, d) {
-          setSelected({ id: d.data.id, category: d.data.category });
+          selected?.id !== d.data.id &&
+            setSelected({ id: d.data.id, category: d.data.category });
           d3.select(this).transition().duration(200).attr("fill", "#FFF");
           d3.select(event.target.parentNode)
             .transition()
@@ -152,6 +153,14 @@ const DoughnutChart = ({
     updateSelection();
   }, [selected]);
 
+  const handleMouseEnter = (row: MetricsData) => {
+    selected?.id !== row.id &&
+      setSelected({ id: row.id, category: row.category });
+  };
+  const handleMouseLeave = () => {
+    setSelected(undefined);
+  };
+
   return (
     <>
       <svg ref={chartRef}></svg>
@@ -161,6 +170,8 @@ const DoughnutChart = ({
             key={item.id}
             color={customColors[index % customColors.length]}
             isSelected={selected?.id === item.id}
+            onMouseEnter={() => handleMouseEnter(item)}
+            onMouseLeave={handleMouseLeave}
           >
             {item.label}
           </StyledListItem>
