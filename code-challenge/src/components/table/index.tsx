@@ -27,8 +27,15 @@ interface Props {
   >;
 }
 
-const Table = ({ data, selected }: Props): JSX.Element => {
+const Table = ({ data, selected, setSelected }: Props): JSX.Element => {
   const cols = Object.keys(data[0] || {});
+
+  const handleMouseEnter = (row: MetricsData) => {
+    setSelected({ id: row.id, category: row.category });
+  };
+  const handleMouseLeave = () => {
+    setSelected(undefined);
+  };
   return (
     <>
       {data && (
@@ -46,6 +53,8 @@ const Table = ({ data, selected }: Props): JSX.Element => {
                 <StyledTableRow
                   key={`${JSON.stringify(row)}-${index}`}
                   isSelected={selected?.id === row.id}
+                  onMouseEnter={() => handleMouseEnter(row)}
+                  onMouseLeave={handleMouseLeave}
                 >
                   {Object.values(row).map((v, i) => (
                     <StyledTableCell key={`${v}-${i}`}>{v}</StyledTableCell>

@@ -1,13 +1,19 @@
 import styled from "styled-components";
 
+export const StyledSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const SubSection = styled.div`
   > h3 {
     font-weight: normal;
-    font-size: 16px;
+    font-size: 14px;
   }
   display: flex;
   flex-direction: column;
-  gap: 4px;
   align-items: center;
   justify-content: center;
 `;
