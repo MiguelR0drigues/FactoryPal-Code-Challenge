@@ -1,3 +1,6 @@
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
+import { setSelectedMetric } from "../../store/metricsSlice";
 import { MetricsData } from "../../types";
 import {
   StyledTable,
@@ -10,32 +13,21 @@ import {
 
 interface Props {
   data: MetricsData[];
-  selected:
-    | {
-        id?: string | null | undefined;
-        category: MetricsData["category"];
-      }
-    | undefined;
-  setSelected: React.Dispatch<
-    React.SetStateAction<
-      | {
-          id?: string | null | undefined;
-          category: MetricsData["category"];
-        }
-      | undefined
-    >
-  >;
 }
 
-const Table = ({ data, selected, setSelected }: Props): JSX.Element => {
+const Table = ({ data }: Props): JSX.Element => {
   const cols = Object.keys(data[0] || {});
+  const dispatch: AppDispatch = useDispatch();
+  const selected = useSelector(
+    (state: RootState) => state.metrics.selectedMetric
+  );
 
   const handleMouseEnter = (row: MetricsData) => {
     selected?.id !== row.id &&
-      setSelected({ id: row.id, category: row.category });
+      dispatch(setSelectedMetric({ id: row.id, category: row.category }));
   };
   const handleMouseLeave = () => {
-    setSelected(undefined);
+    dispatch(setSelectedMetric(undefined));
   };
   return (
     <>

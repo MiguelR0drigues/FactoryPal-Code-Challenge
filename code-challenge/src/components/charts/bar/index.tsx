@@ -1,30 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store";
+import { setSelectedMetric } from "../../../store/metricsSlice";
 import { colors } from "../../../theme";
 import { MetricsData } from "../../../types";
 
 interface Props {
   data: MetricsData[];
-  selected:
-    | {
-        id?: string | null | undefined;
-        category: MetricsData["category"];
-      }
-    | undefined;
-  setSelected: React.Dispatch<
-    React.SetStateAction<
-      | {
-          id?: string | null | undefined;
-          category: MetricsData["category"];
-        }
-      | undefined
-    >
-  >;
 }
 
-const BarChart = ({ data, selected, setSelected }: Props) => {
+const BarChart = ({ data }: Props) => {
   const chartRef = useRef(null);
+  const dispatch: AppDispatch = useDispatch();
+  const selected = useSelector(
+    (state: RootState) => state.metrics.selectedMetric
+  );
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -84,11 +76,11 @@ const BarChart = ({ data, selected, setSelected }: Props) => {
       .attr("height", (d) => Math.abs(y(d.value) - y(0)))
       .attr("fill", (d) => (d.value < 0 ? colors.red : colors.green))
       .on("mouseout", () => {
-        setSelected(undefined);
+        dispatch(setSelectedMetric(undefined));
       })
       .on("mouseover", function (_, d) {
         selected?.id !== d.id &&
-          setSelected({ id: d.id, category: d.category });
+          dispatch(setSelectedMetric({ id: d.id, category: d.category }));
       });
   }, [data]);
 
