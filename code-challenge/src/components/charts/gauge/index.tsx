@@ -1,30 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store";
+import { setSelectedMetric } from "../../../store/metricsSlice";
 import { colors } from "../../../theme";
-import { MetricsData } from "../../../types";
 
 interface Props {
   metricId?: string;
   value: number;
-  selected:
-    | {
-        id?: string | null | undefined;
-        category: MetricsData["category"];
-      }
-    | undefined;
-  setSelected: React.Dispatch<
-    React.SetStateAction<
-      | {
-          id?: string | null | undefined;
-          category: MetricsData["category"];
-        }
-      | undefined
-    >
-  >;
 }
-const GaugeChart = ({ metricId, value, selected, setSelected }: Props) => {
+const GaugeChart = ({ metricId, value }: Props) => {
   const chartRef = useRef(null);
+  const dispatch: AppDispatch = useDispatch();
+  const selected = useSelector(
+    (state: RootState) => state.metrics.selectedMetric
+  );
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -46,10 +37,10 @@ const GaugeChart = ({ metricId, value, selected, setSelected }: Props) => {
       .attr("transform", `translate(${width / 2}, ${height - 20})`)
       .on("mouseover", function () {
         selected?.id !== metricId &&
-          setSelected({ id: metricId, category: "shift" });
+          dispatch(setSelectedMetric({ id: metricId, category: "shift" }));
       })
       .on("mouseout", function () {
-        setSelected(undefined);
+        dispatch(setSelectedMetric(undefined));
       });
 
     const arc: any = d3
@@ -121,7 +112,12 @@ const GaugeChart = ({ metricId, value, selected, setSelected }: Props) => {
   }, [value]);
 
   useEffect(() => {
-    if (selected?.category !== "efficiency" && selected?.id !== "oee") return;
+    if (
+      selected !== undefined &&
+      selected?.category !== "efficiency" &&
+      selected?.id !== "oee"
+    )
+      return;
     const updateSelection = () => {
       const svg = d3.select(chartRef.current);
 

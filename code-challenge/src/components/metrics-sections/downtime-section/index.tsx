@@ -5,37 +5,14 @@ import { StyledSection } from "../styles";
 
 interface Props {
   data: MetricsData[];
-  selected:
-    | {
-        id?: string | null | undefined;
-        category: MetricsData["category"];
-      }
-    | undefined;
-  setSelected: React.Dispatch<
-    React.SetStateAction<
-      | {
-          id?: string | null | undefined;
-          category: MetricsData["category"];
-        }
-      | undefined
-    >
-  >;
 }
 
-const DowntimeSection = ({
-  data,
-  selected,
-  setSelected,
-}: Props): JSX.Element => {
+const DowntimeSection = ({ data }: Props): JSX.Element => {
   return (
     <>
       <StyledSection>
         <h2>Downtime (Seconds)</h2>
-        <DoughnutChart
-          data={data}
-          selected={selected}
-          setSelected={setSelected}
-        />
+        <DoughnutChart data={data} />
       </StyledSection>
     </>
   );

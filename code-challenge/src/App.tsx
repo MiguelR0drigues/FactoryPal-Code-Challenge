@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import fetchData from "./api/data";
 import Card from "./components/card";
 import DowntimeSection from "./components/metrics-sections/downtime-section";
@@ -6,6 +7,8 @@ import EfficiencySection from "./components/metrics-sections/efficiency-section"
 import ShiftSection from "./components/metrics-sections/shift-section";
 import Table from "./components/table";
 import { ToastProvider } from "./contexts/ToastContext";
+import { AppDispatch, RootState } from "./store";
+import { setMetrics } from "./store/metricsSlice";
 import { Category, MetricsData } from "./types";
 
 function separateMetricsByCategory(
@@ -25,11 +28,8 @@ function separateMetricsByCategory(
 }
 
 const App = () => {
-  const [metrics, setMetrics] = useState<MetricsData[]>([]);
-  const [selectedMetric, setSelectedMetric] = useState<
-    | { id?: MetricsData["id"] | null; category: MetricsData["category"] }
-    | undefined
-  >(undefined);
+  const dispatch: AppDispatch = useDispatch();
+  const metrics = useSelector((state: RootState) => state.metrics.metrics);
 
   const downtimeMetrics = separateMetricsByCategory(metrics).downtime;
   const shiftMetrics = separateMetricsByCategory(metrics).shift;
@@ -40,7 +40,7 @@ const App = () => {
       try {
         const result = await fetchData();
         if (result && result.data) {
-          setMetrics(result.data);
+          dispatch(setMetrics(result.data));
         } else {
           console.error("Invalid response from fetchData");
         }
@@ -49,7 +49,7 @@ const App = () => {
       }
     }
     fetchMetrics();
-  }, []);
+  }, [dispatch]);
 
   return (
     <ToastProvider>
@@ -72,40 +72,22 @@ const App = () => {
               maxWidth: "90%",
             }}
           >
-            {efficiencyMetrics && shiftMetrics.length > 0 && (
-              <Card>
-                <EfficiencySection
-                  data={efficiencyMetrics}
-                  selected={selectedMetric}
-                  setSelected={setSelectedMetric}
-                />
-              </Card>
-            )}
+            <Card>
+              <EfficiencySection data={efficiencyMetrics} />
+            </Card>
             {shiftMetrics && shiftMetrics.length > 0 && (
               <Card>
-                <ShiftSection
-                  selected={selectedMetric}
-                  setSelected={setSelectedMetric}
-                  data={shiftMetrics}
-                />
+                <ShiftSection data={shiftMetrics} />
               </Card>
             )}
             {downtimeMetrics && downtimeMetrics.length > 0 && (
               <Card>
-                <DowntimeSection
-                  selected={selectedMetric}
-                  setSelected={setSelectedMetric}
-                  data={downtimeMetrics}
-                />
+                <DowntimeSection data={downtimeMetrics} />
               </Card>
             )}
           </article>
           <Card>
-            <Table
-              data={metrics}
-              selected={selectedMetric}
-              setSelected={setSelectedMetric}
-            />
+            <Table data={metrics} />
           </Card>
         </main>
       )}

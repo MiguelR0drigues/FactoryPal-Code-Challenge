@@ -1,6 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import * as d3 from "d3";
 import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store";
+import { setSelectedMetric } from "../../../store/metricsSlice";
 import { colors } from "../../../theme";
 import { MetricsData } from "../../../types";
 import {
@@ -10,23 +12,9 @@ import {
 
 interface Props {
   data: MetricsData[];
-  selected:
-    | {
-        id?: string | null | undefined;
-        category: MetricsData["category"];
-      }
-    | undefined;
-  setSelected: React.Dispatch<
-    React.SetStateAction<
-      | {
-          id?: string | null | undefined;
-          category: MetricsData["category"];
-        }
-      | undefined
-    >
-  >;
   customColors?: string[];
 }
+
 const defaultColors: string[] = [colors.darkBlue, colors.lightBlue];
 
 const convertToHours = (data: MetricsData[]): MetricsData[] => {
@@ -51,11 +39,13 @@ const convertToHours = (data: MetricsData[]): MetricsData[] => {
 
 const DoughnutChart = ({
   data,
-  selected,
-  setSelected,
   customColors = defaultColors,
 }: Props): JSX.Element => {
   const chartRef = useRef<SVGSVGElement | null>(null);
+  const dispatch: AppDispatch = useDispatch();
+  const selected = useSelector(
+    (state: RootState) => state.metrics.selectedMetric
+  );
 
   const dataInHours = convertToHours(data);
 
@@ -92,10 +82,12 @@ const DoughnutChart = ({
         .attr("d", arc)
         .attr("fill", (_, i) => customColors[i % customColors.length])
         .on("mouseover", function (_, d) {
-          setSelected({ id: d.data.id, category: d.data.category });
+          dispatch(
+            setSelectedMetric({ id: d.data.id, category: d.data.category })
+          );
         })
         .on("mouseout", function () {
-          setSelected(undefined);
+          dispatch(setSelectedMetric(undefined));
         });
 
       newArcs
@@ -117,12 +109,18 @@ const DoughnutChart = ({
     };
 
     renderChart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   useEffect(() => {
-    if (selected?.category !== "shift" && selected?.category !== "downtime")
-      return;
     const updateSelection = () => {
+      console.log();
+      if (
+        selected !== undefined &&
+        selected.category !== "shift" &&
+        selected.category !== "downtime"
+      )
+        return;
       const svg = d3.select(chartRef.current);
 
       svg.selectAll(".arc path").attr("fill", (d: any, i: number) => {
@@ -137,15 +135,7 @@ const DoughnutChart = ({
     };
 
     updateSelection();
-  }, [selected]);
-
-  const handleMouseEnter = (row: MetricsData) => {
-    selected?.id !== row.id &&
-      setSelected({ id: row.id, category: row.category });
-  };
-  const handleMouseLeave = () => {
-    setSelected(undefined);
-  };
+  }, [selected, customColors]);
 
   return (
     <>
@@ -156,8 +146,12 @@ const DoughnutChart = ({
             key={item.id}
             color={customColors[index % customColors.length]}
             isSelected={selected?.id === item.id}
-            onMouseEnter={() => handleMouseEnter(item)}
-            onMouseLeave={handleMouseLeave}
+            onMouseEnter={() =>
+              dispatch(
+                setSelectedMetric({ id: item.id, category: item.category })
+              )
+            }
+            onMouseLeave={() => dispatch(setSelectedMetric(undefined))}
           >
             {item.label}
           </StyledListItem>
@@ -166,4 +160,5 @@ const DoughnutChart = ({
     </>
   );
 };
-export default DoughnutChart;
+
+export default React.memo(DoughnutChart);
