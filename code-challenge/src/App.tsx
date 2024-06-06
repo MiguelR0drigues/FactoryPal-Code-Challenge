@@ -72,13 +72,15 @@ const App = () => {
               maxWidth: "90%",
             }}
           >
-            <Card>
-              <EfficiencySection
-                data={efficiencyMetrics}
-                selected={selectedMetric}
-                setSelected={setSelectedMetric}
-              />
-            </Card>
+            {efficiencyMetrics && shiftMetrics.length > 0 && (
+              <Card>
+                <EfficiencySection
+                  data={efficiencyMetrics}
+                  selected={selectedMetric}
+                  setSelected={setSelectedMetric}
+                />
+              </Card>
+            )}
             {shiftMetrics && shiftMetrics.length > 0 && (
               <Card>
                 <ShiftSection

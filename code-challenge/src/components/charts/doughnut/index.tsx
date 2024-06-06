@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as d3 from "d3";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { colors } from "../../../theme";
 import { MetricsData } from "../../../types";
 import {
@@ -91,27 +91,11 @@ const DoughnutChart = ({
         .append("path")
         .attr("d", arc)
         .attr("fill", (_, i) => customColors[i % customColors.length])
-        .on("mouseover", function (event, d) {
-          selected?.id !== d.data.id &&
-            setSelected({ id: d.data.id, category: d.data.category });
-          d3.select(this).transition().duration(200).attr("fill", "#FFF");
-          d3.select(event.target.parentNode)
-            .transition()
-            .duration(200)
-            .select("text")
-            .attr("fill", "black");
+        .on("mouseover", function (_, d) {
+          setSelected({ id: d.data.id, category: d.data.category });
         })
-        .on("mouseout", function (event) {
+        .on("mouseout", function () {
           setSelected(undefined);
-          d3.select(this)
-            .transition()
-            .duration(200)
-            .attr("fill", (_, i) => customColors[i % customColors.length]);
-          d3.select(event.target.parentNode)
-            .transition()
-            .duration(200)
-            .select("text")
-            .attr("fill", "white");
         });
 
       newArcs
@@ -133,9 +117,11 @@ const DoughnutChart = ({
     };
 
     renderChart();
-  }, [data, setSelected]);
+  }, [data]);
 
   useEffect(() => {
+    if (selected?.category !== "shift" && selected?.category !== "downtime")
+      return;
     const updateSelection = () => {
       const svg = d3.select(chartRef.current);
 

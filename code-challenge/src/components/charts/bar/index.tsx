@@ -93,6 +93,8 @@ const BarChart = ({ data, selected, setSelected }: Props) => {
   }, [data]);
 
   useEffect(() => {
+    if (selected?.category !== "efficiency" && selected?.id === "oee") return;
+
     const updateSelection = () => {
       const svg = d3.select(chartRef.current);
 
