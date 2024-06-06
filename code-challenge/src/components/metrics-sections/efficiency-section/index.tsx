@@ -11,7 +11,7 @@ const EfficiencySection = ({ data }: Props) => {
   const ooeMetric = data.find((item) => item.id === "oee");
 
   return (
-    <StyledSection>
+    <StyledSection data-testid="efficiency-section">
       <h2>Efficiency</h2>
       <SubSection>
         <h3>Overall equipment effectiveness</h3>

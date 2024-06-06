@@ -21,18 +21,29 @@ export const SubSection = styled.div`
 export const StyledUnorderedList = styled.ul`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
+  padding: 0;
 `;
 
 export const StyledListItem = styled.li<{ isSelected: boolean; color: string }>`
   width: 100%;
-  text-decoration: underline;
-  text-decoration-color: ${({ color }) => color};
-  text-decoration-thickness: ${({ isSelected }) =>
-    isSelected ? "4px" : "2px"};
-  font-weight: ${({ isSelected }) => (isSelected ? "bold" : "normal")};
-  &::marker {
+  display: flex;
+  align-items: center;
+
+  &::before {
+    content: "\\2022"; /* Unicode for a bullet point */
     font-size: 28px;
     color: ${({ color }) => color};
+    margin-right: 4px; /* Adjust the spacing as needed */
+  }
+
+  span {
+    text-decoration: underline;
+    text-decoration-color: ${({ color }) => color};
+    text-decoration-thickness: ${({ isSelected }) =>
+      isSelected ? "4px" : "2px"};
+    font-weight: ${({ isSelected }) => (isSelected ? "bold" : "normal")};
   }
 `;

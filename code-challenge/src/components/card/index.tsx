@@ -5,7 +5,7 @@ type CardProps = {
 };
 
 const Card = ({ children }: CardProps) => {
-  return <StyledCard>{children}</StyledCard>;
+  return <StyledCard data-testid="card">{children}</StyledCard>;
 };
 
 export default Card;

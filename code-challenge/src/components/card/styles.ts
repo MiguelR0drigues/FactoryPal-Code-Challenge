@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../theme";
 
-export const StyledCard = styled.section`
+export const StyledCard = styled.article`
   // max-height: 370px;
   min-width: 300px;
   width: fit-content;

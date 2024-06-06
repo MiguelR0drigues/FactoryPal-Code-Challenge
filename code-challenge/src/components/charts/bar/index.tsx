@@ -37,6 +37,7 @@ const BarChart = ({ data }: Props) => {
       .select(chartRef.current)
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.bottom)
+      .attr("data-testid", "chart-bar")
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -75,6 +76,7 @@ const BarChart = ({ data }: Props) => {
       .attr("width", x.bandwidth())
       .attr("height", (d) => Math.abs(y(d.value) - y(0)))
       .attr("fill", (d) => (d.value < 0 ? colors.red : colors.green))
+      .attr("data-testid", (d) => `bar-${d.id}`)
       .on("mouseout", () => {
         dispatch(setSelectedMetric(undefined));
       })
@@ -85,7 +87,11 @@ const BarChart = ({ data }: Props) => {
   }, [data]);
 
   useEffect(() => {
-    if (selected?.category !== "efficiency" && selected?.id === "oee") return;
+    if (
+      selected?.category !== undefined &&
+      (selected?.category !== "efficiency" || selected?.id === "oee")
+    )
+      return;
 
     const updateSelection = () => {
       const svg = d3.select(chartRef.current);

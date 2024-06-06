@@ -73,16 +73,22 @@ const App = () => {
             }}
           >
             <Card>
-              <EfficiencySection data={efficiencyMetrics} />
+              <EfficiencySection
+                data-testid="efficiency-section"
+                data={efficiencyMetrics}
+              />
             </Card>
             {shiftMetrics && shiftMetrics.length > 0 && (
               <Card>
-                <ShiftSection data={shiftMetrics} />
+                <ShiftSection data-testid="shift-section" data={shiftMetrics} />
               </Card>
             )}
             {downtimeMetrics && downtimeMetrics.length > 0 && (
               <Card>
-                <DowntimeSection data={downtimeMetrics} />
+                <DowntimeSection
+                  data-testid="downtime-section"
+                  data={downtimeMetrics}
+                />
               </Card>
             )}
           </article>

@@ -61,6 +61,7 @@ const DoughnutChart = ({
       .attr("width", width)
       .attr("height", height)
       .append("g")
+      .attr("data-testid", "doughnut-chart")
       .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
     const pie = d3.pie<MetricsData>().value((d) => d.value);
@@ -81,6 +82,7 @@ const DoughnutChart = ({
         .append("path")
         .attr("d", arc)
         .attr("fill", (_, i) => customColors[i % customColors.length])
+        .attr("data-testid", (d) => `arc-${d.data.id}`)
         .on("mouseover", function (_, d) {
           dispatch(
             setSelectedMetric({ id: d.data.id, category: d.data.category })
@@ -96,6 +98,7 @@ const DoughnutChart = ({
         .attr("text-anchor", "middle")
         .attr("font-size", "12px")
         .attr("fill", "white")
+        .attr("data-testid", (d) => `text-${d.data.id}`)
         .text((d) =>
           d.data.category === "shift" ? d.data.value.toFixed(2) : d.data.value
         );
@@ -153,7 +156,7 @@ const DoughnutChart = ({
             }
             onMouseLeave={() => dispatch(setSelectedMetric(undefined))}
           >
-            {item.label}
+            <span>{item.label}</span>
           </StyledListItem>
         ))}
       </StyledUnorderedList>
