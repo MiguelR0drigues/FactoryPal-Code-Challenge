@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChartsSection, MainContainer } from "./App.Styles";
 import fetchData from "./api/data";
@@ -37,6 +37,8 @@ const App = () => {
     (state: RootState) => state.metrics.filteredMetrics
   );
 
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+
   const downtimeMetrics = separateMetricsByCategory(
     filteredMetrics || metrics
   ).downtime;
@@ -67,18 +69,49 @@ const App = () => {
     }
     fetchMetrics();
   }, [dispatch]);
+
+  const handleCardClick = (cardType: string) => {
+    setSelectedCard((prevSelectedCard) =>
+      prevSelectedCard === cardType ? null : cardType
+    );
+  };
+
   return (
     <ToastProvider>
       <MainContainer>
-        {hasDowntimeMetrics && hasShiftMetrics && hasEfficiencyMetrics ? (
+        {hasDowntimeMetrics || hasShiftMetrics || hasEfficiencyMetrics ? (
           <ChartsSection>
             {hasShiftMetrics && (
-              <Card>
+              <Card
+                onClick={() => handleCardClick("shift")}
+                style={{
+                  cursor: "pointer",
+                  transform:
+                    selectedCard === "shift"
+                      ? "scale(1.1)"
+                      : selectedCard
+                      ? "scale(0.8)"
+                      : "scale(1)",
+                  transition: "transform 0.3s",
+                }}
+              >
                 <ShiftSection data-testid="shift-section" data={shiftMetrics} />
               </Card>
             )}
             {hasEfficiencyMetrics && (
-              <Card>
+              <Card
+                onClick={() => handleCardClick("efficiency")}
+                style={{
+                  cursor: "pointer",
+                  transform:
+                    selectedCard === "efficiency"
+                      ? "scale(1.1)"
+                      : selectedCard
+                      ? "scale(0.8)"
+                      : "scale(1)",
+                  transition: "transform 0.3s",
+                }}
+              >
                 <EfficiencySection
                   data-testid="efficiency-section"
                   data={efficiencyMetrics}
@@ -86,7 +119,19 @@ const App = () => {
               </Card>
             )}
             {hasDowntimeMetrics && (
-              <Card>
+              <Card
+                onClick={() => handleCardClick("downtime")}
+                style={{
+                  cursor: "pointer",
+                  transform:
+                    selectedCard === "downtime"
+                      ? "scale(1.1)"
+                      : selectedCard
+                      ? "scale(0.8)"
+                      : "scale(1)",
+                  transition: "transform 0.3s",
+                }}
+              >
                 <DowntimeSection
                   data-testid="downtime-section"
                   data={downtimeMetrics}

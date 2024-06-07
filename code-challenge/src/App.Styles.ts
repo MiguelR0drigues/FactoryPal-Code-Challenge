@@ -1,11 +1,14 @@
 import styled from "styled-components";
 
 export const ChartsSection = styled.article`
+  margin-top: 60px;
   display: flex;
   gap: 20px;
-  max-height: 40%;
+  height: 50dvh;
+  // max-height: 100dvh;
   max-width: 90%;
   align-items: center;
+  margin-bottom: 50px;
 `;
 
 export const MainContainer = styled.main`

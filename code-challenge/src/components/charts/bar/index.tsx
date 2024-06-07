@@ -84,8 +84,7 @@ const BarChart = ({ data }: Props) => {
         dispatch(setSelectedMetric(undefined));
       })
       .on("mouseover", function (_, d) {
-        selected?.id !== d.id &&
-          dispatch(setSelectedMetric({ id: d.id, category: d.category }));
+        dispatch(setSelectedMetric({ id: d.id, category: d.category }));
       });
   }, [data]);
 
