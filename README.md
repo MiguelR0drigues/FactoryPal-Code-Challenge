@@ -7,7 +7,7 @@ FactoryPal ingests and transform large amount of data that in the end, needs to 
 ## Solution:
 ### Default state:
 ![image](https://github.com/MiguelR0drigues/FactoryPal-Code-Challenge/assets/96126710/b1a99271-c340-4dbc-9ab5-1ca3c2548b02)
-![image](https://github.com/MiguelR0drigues/FactoryPal-Code-Challenge/assets/96126710/f14f6e55-5718-4f70-a695-f0b0f00124b0)
+![image](https://github.com/MiguelR0drigues/FactoryPal-Code-Challenge/assets/96126710/c41dae63-d0e9-4184-8189-1bf80dcec10a)
 
 ### Hovering a doughnut chart arc:
 ![image](https://github.com/MiguelR0drigues/FactoryPal-Code-Challenge/assets/96126710/5b2ea6ce-86a4-4790-90c1-3ca8bc9ed663)
