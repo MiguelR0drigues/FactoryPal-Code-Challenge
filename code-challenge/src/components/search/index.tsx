@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import { setFilteredMetrics } from "../../store/metricsSlice";
-import SearchIcon from "../../theme/icons/Search";
+import iconsMap from "../../theme/icons";
 import { StyledInput, StyledWrapper } from "./styles";
 
 const Search = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState("");
   const metrics = useSelector((state: RootState) => state.metrics.metrics);
   const dispatch: AppDispatch = useDispatch();
+
+  const Search = iconsMap.search;
 
   useEffect(() => {
     if (searchTerm === "") {
@@ -32,7 +34,7 @@ const Search = (): JSX.Element => {
 
   return (
     <StyledWrapper className="search-box">
-      <SearchIcon />
+      <Search />
       <StyledInput
         type="text"
         className="input-search"

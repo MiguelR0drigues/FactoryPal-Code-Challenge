@@ -32,7 +32,6 @@ const Table = ({ data }: Props): JSX.Element => {
     dispatch(setSelectedMetric(undefined));
   };
 
-  console.log(data);
   return (
     <>
       {data && data.length > 0 ? (

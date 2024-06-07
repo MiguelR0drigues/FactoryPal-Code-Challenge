@@ -5,6 +5,11 @@
   "jest": {
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!d3)/"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/index.tsx",
+      "!src/reportWebVitals.ts"
     ]
   },
   "dependencies": {

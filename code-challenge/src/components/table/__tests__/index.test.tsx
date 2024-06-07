@@ -96,4 +96,15 @@ describe("Table component", () => {
       setSelectedMetric(undefined),
     ]);
   });
+
+  it("renders NoTableResults when data is empty", () => {
+    render(
+      <Provider store={store}>
+        <Table data={[]} />
+      </Provider>
+    );
+
+    // Check if NoTableResults component is rendered
+    expect(screen.getByTestId("no-table-results")).toBeInTheDocument();
+  });
 });

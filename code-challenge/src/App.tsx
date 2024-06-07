@@ -148,7 +148,7 @@ const App = () => {
             {metrics && metrics.length > 0 ? (
               <Table data={filteredMetrics || metrics} />
             ) : (
-              <> </>
+              <></>
             )}
           </>
         </Card>

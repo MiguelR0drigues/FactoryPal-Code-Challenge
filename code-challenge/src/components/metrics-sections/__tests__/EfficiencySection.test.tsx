@@ -63,7 +63,26 @@ describe("EfficiencySection", () => {
     const barChart = screen.getByTestId("bar-chart");
     expect(barChart).toBeInTheDocument();
 
+    // Ensure that the BarChart receives only the efficiency data excluding the "oee" metric
     const { data } = JSON.parse(barChart.textContent || "{}");
-    expect(data).toEqual(MOCK_DATA);
+    const expectedData = [
+      {
+        id: "sl",
+        label: "Stop Loss",
+        value: 10,
+        type: "number",
+        description: "Stop loss description",
+        category: "efficiency",
+      },
+      {
+        id: "lbp",
+        label: "Loss Before Pallets",
+        value: 5,
+        type: "number",
+        description: "Loss before pallets description",
+        category: "efficiency",
+      },
+    ];
+    expect(data).toEqual(expectedData);
   });
 });

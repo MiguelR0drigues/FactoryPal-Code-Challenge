@@ -117,7 +117,6 @@ const DoughnutChart = ({
 
   useEffect(() => {
     const updateSelection = () => {
-      console.log();
       if (
         selected !== undefined &&
         selected.category !== "shift" &&

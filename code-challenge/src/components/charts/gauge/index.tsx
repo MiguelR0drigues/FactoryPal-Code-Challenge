@@ -10,8 +10,9 @@ interface Props {
   metricId?: string;
   value: number;
 }
+
 const GaugeChart = ({ metricId, value }: Props) => {
-  const chartRef = useRef(null);
+  const chartRef = useRef<SVGSVGElement>(null);
   const dispatch: AppDispatch = useDispatch();
   const selected = useSelector(
     (state: RootState) => state.metrics.selectedMetric
@@ -34,6 +35,7 @@ const GaugeChart = ({ metricId, value }: Props) => {
       .attr("height", height)
       .attr("class", "semicircle")
       .append("g")
+      .attr("role", "svg")
       .attr("transform", `translate(${width / 2}, ${height - 20})`)
       .on("mouseover", function () {
         selected?.id !== metricId &&
@@ -107,7 +109,6 @@ const GaugeChart = ({ metricId, value }: Props) => {
         "fill",
         value === 0.5 ? colors.yellow : value > 0.5 ? colors.green : colors.red
       )
-
       .text(value * 100);
   }, [value]);
 
@@ -134,7 +135,7 @@ const GaugeChart = ({ metricId, value }: Props) => {
     updateSelection();
   }, [selected]);
 
-  return <svg ref={chartRef}></svg>;
+  return <svg ref={chartRef} role="img" aria-label="Gauge Chart"></svg>;
 };
 
 export default GaugeChart;
