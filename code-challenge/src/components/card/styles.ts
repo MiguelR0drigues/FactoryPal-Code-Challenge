@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { colors } from "../../theme";
 
 export const StyledCard = styled.article`
-  // max-height: 370px;
+  height: 100%;
   min-width: 300px;
   width: fit-content;
   max-width: 90%;

@@ -4,8 +4,12 @@ type CardProps = {
   children: JSX.Element;
 };
 
-const Card = ({ children }: CardProps) => {
-  return <StyledCard data-testid="card">{children}</StyledCard>;
+const Card = ({ children, ...props }: CardProps) => {
+  return (
+    <StyledCard data-testid="card" {...props}>
+      {children}
+    </StyledCard>
+  );
 };
 
 export default Card;

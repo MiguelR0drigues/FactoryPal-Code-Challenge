@@ -5,6 +5,7 @@ export const StyledSection = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-height: 440px;
 `;
 
 export const SubSection = styled.div`

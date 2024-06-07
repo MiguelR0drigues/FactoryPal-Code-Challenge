@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import { colors } from "../../theme";
 
+export const Padding = styled.div`
+  padding: 10px;
+`;
+
 export const StyledTable = styled.table`
   border-collapse: collapse;
   table-layout: fixed;

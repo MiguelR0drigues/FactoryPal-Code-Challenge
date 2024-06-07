@@ -21,14 +21,9 @@ const BarChart = ({ data }: Props) => {
   useEffect(() => {
     if (!chartRef.current) return;
 
-    const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+    const margin = { top: 40, right: 30, bottom: 40, left: 50 };
     const width = 330 - margin.left - margin.right;
     const height = 220 - margin.top - margin.bottom;
-
-    // Filter efficiency data excluding "oee"
-    const efficiencyData = data.filter(
-      (item) => item.category === "efficiency" && item.id !== "oee"
-    );
 
     // Clear previous SVG elements
     d3.select(chartRef.current).selectAll("*").remove();
@@ -36,26 +31,35 @@ const BarChart = ({ data }: Props) => {
     const svg = d3
       .select(chartRef.current)
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.bottom)
+      .attr("height", height + margin.top + margin.bottom)
       .attr("data-testid", "chart-bar")
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     const x = d3
       .scaleBand()
-      .domain(efficiencyData.map((d) => d.label))
+      .domain(data.map((d) => d.label))
       .range([0, width])
       .padding(0.1);
 
+    // Ensure the Y domain has a range even for single data points
     const y = d3
       .scaleLinear()
-      // @ts-ignore
       .domain([
-        d3.min(efficiencyData, (d) => d.value),
-        d3.max(efficiencyData, (d) => d.value),
+        Math.min(0, d3.min(data, (d) => d.value) ?? 0),
+        d3.max(data, (d) => d.value) ?? 1,
       ])
       .nice()
       .range([height, 0]);
+
+    // Handle case where there's only one data point
+    if (data.length === 1) {
+      const singleValue = data[0].value;
+      y.domain([
+        Math.min(0, singleValue - Math.abs(singleValue * 0.1)),
+        singleValue + Math.abs(singleValue * 1),
+      ]);
+    }
 
     svg.append("g").call(d3.axisLeft(y));
 
@@ -66,13 +70,12 @@ const BarChart = ({ data }: Props) => {
 
     svg
       .selectAll(".bar")
-      .data(efficiencyData)
+      .data(data)
       .enter()
       .append("rect")
       .attr("class", "bar")
-      // @ts-ignore
-      .attr("x", (d: any) => x(d.label))
-      .attr("y", (d) => (d.value >= 0 ? y(d.value) : y(0)))
+      .attr("x", (d: any) => x(d.label)!)
+      .attr("y", (d) => y(Math.max(0, d.value)))
       .attr("width", x.bandwidth())
       .attr("height", (d) => Math.abs(y(d.value) - y(0)))
       .attr("fill", (d) => (d.value < 0 ? colors.red : colors.green))
@@ -92,7 +95,6 @@ const BarChart = ({ data }: Props) => {
       (selected?.category !== "efficiency" || selected?.id === "oee")
     )
       return;
-
     const updateSelection = () => {
       const svg = d3.select(chartRef.current);
 
